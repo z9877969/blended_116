@@ -1,11 +1,7 @@
 import { readProducts } from '../utils/readProducts.js';
 
-export const getProductsByMinPrice = async (minPrice) => {
+const getProductsByMinPrice = async (min) => {
   const products = await readProducts();
-  const filteredProducts = products.filter(
-    (product) => parseFloat(product.price) >= minPrice,
-  );
-  return filteredProducts;
+  return products.filter((product) => product.price >= min);
 };
-
-console.log(await getProductsByMinPrice(400));
+console.log(await getProductsByMinPrice(320));
