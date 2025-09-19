@@ -1,119 +1,166 @@
-Підготовчі дії:
+# TASK 1
 
-Створіть новий командний репозиторій на github.com, оберіть .gitignore (node).
-Склонуйте його собі на локальний комп'ютер.
-Виконайте стартові налаштування вашого проєкту:
-Створіть package.json файл за допомогою команди npm init -y. Додайте до нього властивість "type": "module".
-Встановіть npm пакет eslint командою npm init @eslint/config@latest та в файлі налаштувань eslint.config.js вкажіть наступний вміст:
-import globals from "globals";
-import pluginJs from "@eslint/js";
+1. Створіть новий командний репозиторій на основі цього шаблонного репозиторію.
+   Створений вами репозиторій ви будете використовувати на всіх подальших заняттях.
+2. Додайте до нього в колаборатори всіх студентів вашої групи.
+3. Налаштуйте захист на гілку `main`:
 
-export default [
-  pluginJs.configs.recommended,
-  {
-    files: ["src/**/*.js"],
-    languageOptions: { globals: globals.node },
-    rules: {
-      semi: "error",
-      "no-unused-vars": "off",
-      "no-undef": "error",
-    },
-  },
-];
+   - Увімкніть опцію "Require a pull request before merging";
+   - Увімкніть опцію "Automatically delete head branches".
 
-В корні проєкту створіть файл .prettierrc з наступним вмістом:
-{
-  "semi": true,
-  "singleQuote": true,
-  "trailingComma": "all",
-  "printWidth": 80
-}
+4. Склонуйте репозиторій на локальний комп'ютер.
+5. Створіть гілку під свою задачу від гілки `main` та продовжуйте в ній виконувати завдання. Після завершення завдання змержте свою гілку в гілку `main`.
+6. Проєкт має базову структуру і налаштування, які ви будете розширяти.
+7. Створіть middleware для обробки помилок:
+   - Створіть файл `src/middlewares/errorHandler.js`;
+   - Застосуйте middleware `errorHandler` у файлі `src/server.js`;
+   - Middleware `errorHandler` призначений для обробки помилок у вашому Express-сервері та має приймати чотири аргументи;
+   - У разі виявлення помилки `errorHandler` має відправити клієнту відповідь зі статусом `500` та об’єкт з наступними властивостями:
 
-Переконайтесь, що в файлі .gitignore серед виключень є папка /node_modules.
-Встановіть пакет @faker-js/faker для генерації мокових даних за допомогою команди npm i -D @faker-js/faker.
-4. Створіть в проєкті структуру згідно наданого прикладу:
+```code
+    {
+        status: 500,
+        message: "Something went wrong",
+        data: <конкретне повідомлення про помилку, отримане з об'єкта помилки>
+    }
+```
 
+8. Створіть і застосуйте у файлі `src/server.js` middleware `notFoundHandler`, призначений для обробки запитів, коли клієнт звертається до неіснуючого маршруту. `notFoundHandler` у разі виявлення помилки має відправити клієнту відповідь зі статусом 404 та об’єкт з наступними властивостями:
 
+```code
+    {
+        message: "Route not found"
+    }
+```
 
+9. Створіть і застосуйте у файлі `src/routers/products.js` функцію `ctrlWrapper`, яка діятиме як обгортка для контролерів у вашому Express-додатку, для автоматичної обробки помилок, що можуть виникнути під час виконання запитів. В цій обгортці при виникненні помилки викличте next(err) для залучення middleware `errorHandler`.
 
+# TASK 2
 
+1. Створіть свій кластер в mongodb для колекції продуктів (`products`) та запишіть усі необхідні дані для його підключення у змінні оточення. Назви змінних візьми з файлу `env.example`.
+2. В папці `src/db` створіть модель продукту `Product`, що буде включати в себе такі поля:
 
-5. У файлі src/constants/products.js оголосіть змінну PATH_DB. Ініціалізуйте її значенням, яке буде зберігати шлях до файлу src/db/db.json.
+- name - string, required
+- price - number, required
+- category - string, enum('books', 'electronics', 'clothing', 'other'), required, default 'other'
+- description - string, optional
+- createdAt - дата створення
+- updatedAt - дата оновлення
 
-6. До файлу createFakeProduct.js додайте наступний вміст:
+Для останніх двох полів можна використати параметр `timestamps: true` при створенні моделі.
 
-import { faker } from "@faker-js/faker";
+Імпортуйте базовий набір продуктів із файлу `src/db/products.json` до вашої бази, користуючись будь-яким UI інтерфейсом (в браузері, Mongo Compass тощо). Переконайтеся, що назва колекції в коді моделі та в візуальному інтерфейсі співпадають.
 
-export const createFakeProduct = () => ({
-  name: faker.commerce.productName(),
-  price: faker.commerce.price(),
-  category: faker.commerce.department(),
-  description: faker.commerce.productDescription(),
-});
+# TASK 3
 
+Створіть роут GET `/products` для отримання масиву усіх продуктів.
 
+Обробка цього роута має включати:
 
-# Задача 1
+- Реєстрацію роута в файлі `src/routers/products.js`
+- Опис контролера для цього роута в файлі `src/controllers/products.js`
+- Створення сервісу в файлі `src/services/products.js`
+- Відповідь сервера має містити об’єкт з наступними властивостями:
+  ```code
+      {
+          status: 200,
+          message: "Successfully found products!",
+          data: <масив продуктів>
+      }
+  ```
 
-Створіть файл src/scripts/generateProducts.js.
-В ньому опишіть функцію generateProducts. Вона має за допомогою функції createFakeProduct, створювати передану кількість згенерованих продуктів, а потім додавати їх до масиву у файлі src/db/db.json і записувати їх назад до файлу src/db/db.json.
-Додайте до файлу package.json скрипт generate для виконання коду з файлу src/scripts/generateProducts.js.
-Виконавши скрипт generate, переконайтесь, що ваша функція generateProducts коректно додає нові продукти до вже існуючих. Тобто, якщо масив був порожній, після виклику функції в ньому має бути передана кількість продуктів, наприклад 7. Якщо продуктів було 4 і у виклик передали 7, то після виклику функції їх має стати 11. У файлі src/db/db.json мають відбутися відповідні зміни.
+# TASK 4
 
+Створіть роут GET `/products/productId` для отримання даних одного продукта по його ідентифікатору.
 
-# Задача 2
+Обробка цього роута має включати:
 
-Створіть файл src/scripts/getProductsByMinPrice.js.
-В ньому опишіть функцію getProductsByMinPrice. Вона має приймати параметром значення вартості і повертати масив продуктів із файлу src/db/db.json, вартість яких дорівнює або перевищує значення параметра функції. Додайте в цьому файлі логування результату виклику функції getProductsByMinPrice.
-Додайте до файлу package.json скрипт get-products-by-min-price для виконання коду з файлу src/scripts/getProductsByMinPrice.js.
-Виконавши скрипт get-products-by-min-price, переконайтесь, що ваша функція getProductsByMinPrice працює коректно.
+- Реєстрацію роута в файлі `src/routers/products.js`
+- Опис контролера для цього роута в файлі `src/controllers/products.js`
+- Створення сервісу в файлі `src/services/products.js`
+- Якщо за переданим ідентифікатором продукт було знайдено, то відповідь сервера має містити об’єкт з наступними властивостями:
 
+```code
+   {
+       status: 200,
+       message: "Successfully found product with id {productId}!",
+       data: <об'єкт продукта>
+   }
+```
 
-# Задача 3
+- Додайте перевірку чи продукт за переданим ідентифікатором було знайдено. Якщо продукт не було знайдено, то за допомогою [**http-errors**](https://www.npmjs.com/package/http-errors) створіть помилку зі статусом 404 і повідомленням "Product not found".
 
-Створіть файл src/scripts/getTotalPrice.js.
-В ньому опишіть функцію getTotalPrice. Вона має повертати загальну вартість продуктів в масиві у файлі src/db/db.json. Додайте в цьому файлі логування результату виклику функції getTotalPrice.
-Додайте до файлу package.json скрипт get-total-price для виконання коду з файлу src/scripts/getTotalPrice.js.
-Виконавши скрипт get-total-price, переконайтесь, що ваша функція getTotalPrice коректно рахує загальну вартість продуктів з масиву файлу.
+```code
+http-errors(404, "Product not found")
+```
 
+# TASK 5
 
-# Задача 4
+Створіть роут POST `/products` для створення нового продукту. Тіло запиту має в себе включати наступні властивості:
 
-Створіть файл src/scripts/getUniqueCategories.js.
-В ньому опишіть функцію getUniqueCategories. Вона має повертати масив унікальних категорій, які мають продукти в масиві у файлі src/db/db.json. Додайте в цьому файлі логування результату виклику функції getUniqueCategories.
-Додайте до файлу package.json скрипт get-unique-categories для виконання коду з файлу src/scripts/getUniqueCategories.js.
-Виконавши скрипт get-unique-categories, переконайтесь, що ваша функція getUniqueCategories коректно повертає унікальні категорії, які мають продукти в масиві у файлі src/db/db.json.
+- name - обов’язково;
+- price - обов’язково;
+- category - обов’язково;
+- description - не обов’язково;
 
+Обробка цього роута має включати:
 
-# Задача 5
+- Реєстрацію роута в файлі `src/routers/products.js`
+- Опис контролера для цього роута в файлі `src/controllers/products.js`
+- Створення сервісу в файлі `src/services/products.js`
+- При вдалому запиті відповідь сервера має містити об’єкт з наступними властивостями:
 
-Створіть файл src/scripts/modifyProducts.js.
-В ньому опишіть функцію modifyProducts. Вона має перезаписувати вміст файлу src/db/db.json таким чином, щоб у файлі в результаті опинився перелік тих самих продуктів, але без поля description.
-Додайте до файлу package.json скрипт modify-products для виконання коду з файлу src/scripts/modifyProducts.js.
-Виконавши скрипт modify-products, переконайтесь, що ваша функція modifyProducts коректно перезаписує вміст файлу src/db/db.json.
+```code
+   {
+       status: 201,
+       message: "Successfully created a product!",
+       data: <об'єкт створеного продукта>
+   }
+```
 
+# TASK 6
 
-# Задача 6
+Створіть роут PATCH `/products/productId` для оновлення даних одного продукта по його ідентифікатору. Тіло запиту має в себе включати наступні властивості:
 
-Створіть файл src/scripts/groupProductsByCategories.js.
-В ньому опишіть функцію groupProductsByCategories. Вона має повертати об’єкт, в якому назви продуктів будуть згруповані за категоріями. В результаті виконання задачі ви повинні отримати об’єкт схожої структури:
-{
-   category1: [name1, name3, name5],
-   category2: [name2, name7],
-   category3: [name4, name6],
-}
+- name - не обов’язково;
+- price - не обов’язково;
+- category - не обов’язково;
+- description - не обов’язково;
 
-3. Додайте до файлу package.json скрипт group-products для виконання коду з файлу src/scripts/groupProductsByCategories.js.
+Обробка цього роута має включати:
 
-4. Виконавши скрипт group-products, переконайтесь, що ваша функція group-products коректно групує назви продуктів за категоріями.
+- Реєстрацію роута в файлі `src/routers/products.js`
+- Опис контролера для цього роута в файлі `src/controllers/products.js`
+- Створення сервісу в файлі `src/services/products.js`
+- Якщо за переданим ідентифікатором продукт було знайдено, то відповідь сервера має містити об’єкт з наступними властивостями:
 
+```code
+   {
+       status: 200,
+       message: "Successfully patched a product!",
+       data: <оновлений об'єкт продукта>
+   }
+```
 
+- Додайте перевірку чи продукт за переданим ідентифікатором було знайдено. Якщо продукт не було знайдено, то за допомогою [**http-errors**](https://www.npmjs.com/package/http-errors) створіть помилку зі статусом 404 і повідомленням "Product not found".
 
-# Задача 7*
+```code
+http-errors(404, "Product not found")
+```
 
-Створіть в папці db папку files
-Створіть файл src/scripts/createProductsFiles.js.
-В файлі src/constants/products.js оголосіть змінну PATH_FILES_DIR. Ініціалізуйте її значенням, яке буде зберігати шлях до папки files.
-В файлі src/scripts/createProductsFiles.js опишіть функцію createProductsFiles. Вона має створювати в папці files таку кількість файлів, скільки продуктів є в масиві у файлі src/db/db.json. В кожному файлі має бути записаний об’єкт продукту. Назва кожного файлу повинна бути представлені у вигляді назви продукти (кожне слово через дефіс) з форматом json. Наприклад, luxurious-soft-soap.json
-Додайте до файлу package.json скрипт create-products-files для виконання коду з файлу src/scripts/createProductsFiles.js.
-Виконавши скрипт create-products-files, переконайтесь, що в папці files створились очікувані файли.
+# TASK 7
+
+Створіть роут DELETE `/products/productId` для видалення одного продукта по його ідентифікатору.
+
+Обробка цього роута має включати:
+
+- Реєстрацію роута в файлі `src/routers/products.js`
+- Опис контролера для цього роута в файлі `src/controllers/products.js`
+- Створення сервісу в файлі `src/services/products.js`
+- Відповідь сервера, в разі успішного видалення продукту, має бути зі статусом 204 без тіла відповіді
+
+- Додайте перевірку чи продукт за переданим ідентифікатором було знайдено. Якщо продукт не було знайдено, то за допомогою [**http-errors**](https://www.npmjs.com/package/http-errors) створіть помилку зі статусом 404 і повідомленням "Product not found".
+
+```code
+http-errors(404, "Product not found")
+```
