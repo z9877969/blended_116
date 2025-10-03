@@ -8,7 +8,7 @@ import {
 } from '../services/products.js';
 
 export const getProductsController = async (req, res, next) => {
-  const products = await getProductsService();
+  const products = await getProductsService(req.query);
 
   res.json({
     status: 200,

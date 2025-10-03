@@ -1,7 +1,32 @@
 import { ProductsCollection } from '../db/modals/product.js';
 
-export const getProductsService = async () => {
-  const products = await ProductsCollection.find({}, '-createdAt -updatedAt');
+export const getProductsService = async ({ category, minPrice, maxPrice }) => {
+  // const query = {};
+
+  // if (category) {
+  //   query.category = category;
+  // }
+
+  // if (minPrice || maxPrice) {
+  //   query.price = {};
+  //   if (minPrice) query.price.$gte = minPrice;
+  //   if (maxPrice) query.price.$lte = maxPrice;
+  // }
+
+  const query = {
+    ...(category && { category }),
+    ...((minPrice || maxPrice) && {
+      price: {
+        ...(minPrice && { $gte: minPrice }),
+        ...(maxPrice && { $lte: maxPrice }),
+      },
+    }),
+  };
+
+  const products = await ProductsCollection.find(
+    query,
+    '-createdAt -updatedAt',
+  );
 
   return products;
 };
