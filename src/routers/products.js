@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { isValidObjectId } from 'mongoose';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import {
   createProductController,
@@ -12,13 +13,15 @@ import {
   addingProductSchema,
   updatingProductSchema,
 } from '../validation/productsValidation.js';
+import { validateId } from '../middlewares/validateId.js';
 
 export const productsRouter = Router();
 
 productsRouter.get('/products', ctrlWrapper(getProductsController));
 
 productsRouter.get(
-  '/products/:productId',
+  '/products/:id',
+  validateId,
   ctrlWrapper(getProductByIdController),
 );
 productsRouter.post(
@@ -29,11 +32,13 @@ productsRouter.post(
 
 productsRouter.patch(
   '/products/:productId',
+  validateId,
   validateBody(updatingProductSchema),
   ctrlWrapper(patchProductController),
 );
 
 productsRouter.delete(
   '/products/:productId',
+  validateId,
   ctrlWrapper(deleteProductController),
 );

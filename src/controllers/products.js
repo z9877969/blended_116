@@ -18,14 +18,14 @@ export const getProductsController = async (req, res, next) => {
 };
 
 export const getProductByIdController = async (req, res, next) => {
-  const { productId } = req.params;
-  const product = await getProductsById(productId);
+  const { id } = req.params;
+  const product = await getProductsById(id);
   if (!product) {
     throw createHttpError(404, 'Product not found');
   }
   res.status(200).json({
     status: 200,
-    message: `Successfully found contact with id ${productId}!`,
+    message: `Successfully found contact with id ${id}!`,
     data: product,
   });
 };
