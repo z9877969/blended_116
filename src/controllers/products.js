@@ -41,6 +41,11 @@ export const createProductController = async (req, res) => {
 
 export const patchProductController = async (req, res, next) => {
   const { productId } = req.params;
+
+  if (Object.keys(req.body).length === 0) {
+    throw createHttpError(400, 'Body must have one or more fields');
+  }
+
   const result = await updateProduct(productId, req.body);
 
   if (!result) {

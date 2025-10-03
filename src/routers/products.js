@@ -7,6 +7,11 @@ import {
   getProductsController,
   patchProductController,
 } from '../controllers/products.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import {
+  addingProductSchema,
+  updatingProductSchema,
+} from '../validation/productsValidation.js';
 
 export const productsRouter = Router();
 
@@ -16,10 +21,15 @@ productsRouter.get(
   '/products/:productId',
   ctrlWrapper(getProductByIdController),
 );
-productsRouter.post('/products', ctrlWrapper(createProductController));
+productsRouter.post(
+  '/products',
+  validateBody(addingProductSchema),
+  ctrlWrapper(createProductController),
+);
 
 productsRouter.patch(
   '/products/:productId',
+  validateBody(updatingProductSchema),
   ctrlWrapper(patchProductController),
 );
 
