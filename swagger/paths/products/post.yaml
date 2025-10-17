@@ -1,0 +1,27 @@
+tags:
+  - Products
+summary: Create product
+operationId: createProduct
+description: Create product
+security: []
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: ../../components/schemas/products/post_product_request.yaml
+  required: true
+
+responses:
+  '201':
+    description: 'Successfully registered a user!'
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/products/get_products.yaml'
+  '400':
+    description: Bad request | Invalid body
+    content: {}
+  '409':
+    description: Conflict | User with email is exist
+    content: {}

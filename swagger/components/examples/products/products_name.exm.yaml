@@ -1,0 +1,4 @@
+type: string
+description: Product name
+example: Smartphone
+maxLength: 128

@@ -1,0 +1,4 @@
+type: string
+description: Product category
+example: electronics
+enum: ['books', 'electronics', 'clothing', 'other']

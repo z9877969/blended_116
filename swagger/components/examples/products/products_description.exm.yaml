@@ -1,0 +1,4 @@
+type: string
+description: Product description
+example: Latest model smartphone with 5G
+maxLength: 512

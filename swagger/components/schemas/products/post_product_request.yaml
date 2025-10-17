@@ -1,0 +1,28 @@
+# {
+#     status: 200,
+#     message: 'Successfully found products!',
+#     data: products,
+# }
+# {
+#   "_id": "68cd0e4dbe70fdb9a9c2fff6",
+#   "name": "Smartphone",
+#   "price": 699.99,
+#   "category": "electronics",
+#   "description": "Latest model smartphone with 5G"
+# },
+
+type: object
+description: Creating product schema
+required:
+  - name
+  - price
+
+properties:
+  name:
+    $ref: ../../examples/products/products_name.exm.yaml
+  price:
+    $ref: ../../examples/products/products_price.exm.yaml
+  category:
+    $ref: ../../examples/products/products_category.exm.yaml
+  description:
+    $ref: ../../examples/products/products_description.exm.yaml

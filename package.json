@@ -30,6 +30,7 @@
     "http-errors": "^2.0.0",
     "joi": "^18.0.1",
     "mongoose": "^8.4.0",
+    "redocly-cli-plugin-remove-example-schemas": "^1.0.4",
     "swagger-ui-express": "^5.0.1"
   }
 }

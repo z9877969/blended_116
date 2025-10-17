@@ -36,8 +36,8 @@ properties:
         price:
           type: number
           description: Product price
-          min: 0
-          max: 1000000
+          minimum: 0
+          maximum: 1000000
           example: 699.99
         category:
           type: string

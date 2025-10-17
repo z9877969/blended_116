@@ -4,16 +4,20 @@ apis:
     root: docs/openapi.yaml
 extends:
   - recommended
+plugins:
+  - redocly-cli-plugin-remove-example-schemas
+decorators:
+  # Activate the decorator by its ID
+  'remove-example-schemas/post-bundle': on
 rules:
   no-unused-components: error
 theme:
   htmlTemplate: ./docs/index.html
   colors:
     primary:
-      main: "#32329f"
+      main: '#32329f'
   generateCodeSamples:
     languages:
       - lang: curl
       - lang: Node.js
       - lang: JavaScript
-  

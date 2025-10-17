@@ -93,6 +93,45 @@
             "content": {}
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Products"
+        ],
+        "summary": "Create product",
+        "operationId": "createProduct",
+        "description": "Create product",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post_product_request"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully registered a user!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/get_products"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request | Invalid body",
+            "content": {}
+          },
+          "409": {
+            "description": "Conflict | User with email is exist",
+            "content": {}
+          }
+        }
       }
     }
   },
@@ -135,8 +174,8 @@
                 "price": {
                   "type": "number",
                   "description": "Product price",
-                  "min": 0,
-                  "max": 1000000,
+                  "minimum": 0,
+                  "maximum": 1000000,
                   "example": 699.99
                 },
                 "category": {
@@ -159,6 +198,60 @@
             }
           }
         }
+      },
+      "post_product_request": {
+        "type": "object",
+        "description": "Creating product schema",
+        "required": [
+          "name",
+          "price"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/components/examples/products_name"
+          },
+          "price": {
+            "$ref": "#/components/examples/products_price"
+          },
+          "category": {
+            "$ref": "#/components/examples/products_category"
+          },
+          "description": {
+            "$ref": "#/components/examples/products_description"
+          }
+        }
+      }
+    },
+    "examples": {
+      "products_name": {
+        "type": "string",
+        "description": "Product name",
+        "example": "Smartphone",
+        "maxLength": 128
+      },
+      "products_price": {
+        "type": "number",
+        "description": "Product price",
+        "example": 699.99,
+        "minimum": 0,
+        "maximum": 1000000
+      },
+      "products_category": {
+        "type": "string",
+        "description": "Product category",
+        "example": "electronics",
+        "enum": [
+          "books",
+          "electronics",
+          "clothing",
+          "other"
+        ]
+      },
+      "products_description": {
+        "type": "string",
+        "description": "Product description",
+        "example": "Latest model smartphone with 5G",
+        "maxLength": 512
       }
     }
   }
