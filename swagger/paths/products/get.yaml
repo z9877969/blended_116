@@ -1,0 +1,44 @@
+tags:
+  - Products
+summary: Get all products
+operationId: getAllProducts
+description: 'Get all products'
+security: []
+parameters:
+  - in: query
+    name: category
+    required: false
+    description: 'A category of finding products'
+    schema:
+      type: string
+      enum: ['books', 'electronics', 'clothing', 'other']
+      example: 'other'
+  - in: query
+    name: minPrice
+    required: false
+    description: 'A minamal price of finding products'
+    schema:
+      type: number
+      minimum: 0
+      maximum: 1000000
+  - in: query
+    name: maxPrice
+    required: false
+    description: 'A maximal price of finding products'
+    schema:
+      type: number
+      minimum: 0
+      maximum: 1000000
+responses:
+  '200':
+    description: 'Successfully registered a user!'
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/products/get_products.yaml'
+  '400':
+    description: Bad request | Invalid body
+    content: {}
+  '409':
+    description: Conflict | User with email is exist
+    content: {}

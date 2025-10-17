@@ -1,0 +1,50 @@
+# {
+#     status: 200,
+#     message: 'Successfully found products!',
+#     data: products,
+# }
+# {
+#   "_id": "68cd0e4dbe70fdb9a9c2fff6",
+#   "name": "Smartphone",
+#   "price": 699.99,
+#   "category": "electronics",
+#   "description": "Latest model smartphone with 5G"
+# },
+type: object
+description: Get all products response
+properties:
+  status:
+    type: number
+    description: Response status
+    example: 200
+  message:
+    type: string
+    description: Response status
+    example: Successfully found products!
+  data:
+    type: array
+    description: Response data
+    items:
+      type: object
+      properties:
+        _id:
+          description: Product ID
+          example: 68cd0e4dbe70fdb9a9c2fff6
+        name:
+          description: Product name
+          example: Smartphone
+        price:
+          type: number
+          description: Product price
+          min: 0
+          max: 1000000
+          example: 699.99
+        category:
+          type: string
+          description: Product category
+          example: Other
+          enum: ['books', 'electronics', 'clothing', 'other']
+        description:
+          type: string
+          description: Product description
+          example: Latest model smartphone with 5G

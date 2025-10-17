@@ -17,28 +17,28 @@ import { validateId } from '../middlewares/validateId.js';
 
 export const productsRouter = Router();
 
-productsRouter.get('/products', ctrlWrapper(getProductsController));
+productsRouter.get('/', ctrlWrapper(getProductsController));
 
 productsRouter.get(
-  '/products/:id',
+  '/:id',
   validateId,
   ctrlWrapper(getProductByIdController),
 );
 productsRouter.post(
-  '/products',
+  '/',
   validateBody(addingProductSchema),
   ctrlWrapper(createProductController),
 );
 
 productsRouter.patch(
-  '/products/:productId',
+  '/:productId',
   validateId,
   validateBody(updatingProductSchema),
   ctrlWrapper(patchProductController),
 );
 
 productsRouter.delete(
-  '/products/:productId',
+  '/:productId',
   validateId,
   ctrlWrapper(deleteProductController),
 );

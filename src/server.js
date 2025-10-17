@@ -6,6 +6,7 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { productsRouter } from './routers/products.js';
 import { authRouter } from './routers/auth.js';
+import { createSwaggerDocs } from './middlewares/createSwaggerDocs.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -16,7 +17,9 @@ export const setupServer = () => {
   app.use(cors());
 
   app.use('/auth', authRouter);
-  app.use(productsRouter);
+  app.use('/products', productsRouter);
+
+  app.use('/api-docs', createSwaggerDocs());
 
   app.use('*', notFoundHandler);
 
